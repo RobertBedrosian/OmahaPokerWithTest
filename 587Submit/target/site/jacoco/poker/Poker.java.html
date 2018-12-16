@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Poker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">trees</a> &gt; <a href="index.source.html" class="el_package">poker</a> &gt; <span class="el_source">Poker.java</span></div><h1>Poker.java</h1><pre class="source lang-java linenums">//Robert Bedrosian, ID:108610565
+//CS282 Advanced Data Structures
+package poker;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+<span class="nc" id="L9">public class Poker</span>
+{
+	//This program will simulate a &quot;Crazy Omaha&quot; game
+	//by using an array of 52 indices  to simulate a full deck
+	//and the first 13 indices will be hearts, then diamonds,
+	//then clubs, and finally spades. Each player will have
+	//their own array of 52 with 1's indicating a card from the
+	//table and 2's indicating a card from the players hand
+	//If a minimum of 2 cards and a maximum of 3 cards can be
+	//used from the players hand, then the hand must be
+	//constructed using a minimum value of 8 and max of 9
+	//for most cases.
+	//Also, our indices are as follows:
+	//index 0+(13*suit)=Ace, 1+(13*suit)=2, 2+(13*suit)=3,...,
+	//10+(13*suit)=Jack, 11+(13*suit)=Queen, 12+(13*suit)=King
+	public static void main(String[] args)
+	{
+<span class="nc" id="L26">		int numplayers=0;</span>
+<span class="nc" id="L27">		ArrayList&lt;Player&gt; players= new ArrayList&lt;&gt;();</span>
+		//hearts, diamonds, clubs, spades
+		//Testcase
+		//for (int i=0;i&lt;tablesize;i++)
+		//{
+		//	System.out.println(table[i].getType() + &quot; and the value is &quot; +
+		//table[i].getValue());
+		//}
+		//for (int i=0;i&lt;numplayers;i++)
+		//{
+		//	System.out.println(&quot;Player &quot; +
+		//players.get(i).getnumber() + &quot; has&quot;);
+		//	for (int j=0; j&lt;tablesize;j++)
+		//	{
+		//		System.out.println(players.get(i).playercards[j].getValue());
+		//	}
+		//}
+
+		//for (int i=0;i&lt;numplayers;i++)
+		//{
+		//	System.out.println(&quot;Player &quot;
+		//+ players.get(i).getnumber() + &quot; has &quot;);
+		//	for (int j=0; j&lt;52;j++)
+		//	{
+		//		System.out.print(players.get(i).cards[j] + &quot; &quot;);
+		//	}
+		//}
+		//End Testcase
+<span class="nc" id="L55">		players=setCards(args,players,numplayers);</span>
+<span class="nc" id="L56">		numplayers=players.size();</span>
+		//System.out.println(Arrays.toString(players.get(0).cards));
+<span class="nc" id="L58">		rank(numplayers, players);</span>
+<span class="nc" id="L59">		int num=1;</span>
+		//We finally check from highest rank to lowest and then output the
+		//players
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		for (int i=16;i&gt;=1;i--)</span>
+		{
+<span class="nc bnc" id="L64" title="All 2 branches missed.">			for (int j=0;j&lt;numplayers;j++)</span>
+			{
+<span class="nc bnc" id="L66" title="All 2 branches missed.">				if (players.get(j).getrank()==i)</span>
+				{
+<span class="nc" id="L68">					players.get(j).getrankS();</span>
+<span class="nc" id="L69">					System.out.println(num + &quot;) Player &quot;</span>
+<span class="nc" id="L70">							+ players.get(j).getnumber() +</span>
+<span class="nc" id="L71">							&quot; has &quot; + players.get(j).getRank());</span>
+<span class="nc" id="L72">					num++;</span>
+				}
+			}
+		}
+
+<span class="nc" id="L77">	}</span>
+	public static ArrayList&lt;Player&gt; setCards(String [] args, ArrayList&lt;Player&gt; players, int numplayers)
+	{
+<span class="fc" id="L80">		final int tablesize=5;</span>
+<span class="fc" id="L81">		Card[] table=new Card[tablesize];</span>
+<span class="fc" id="L82">		int[] tablevalues=new int[13];</span>
+<span class="fc" id="L83">		int[] tabletype=new int[4];</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		for (int i=0; i&lt;args.length; i++)</span>
+		{
+			int value;
+			int type;
+<span class="fc" id="L88">			String[] parts=args[i].split(&quot;&quot;);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;2&quot;))</span>
+			{
+<span class="fc" id="L91">				parts[0]=&quot;1&quot;;</span>
+			}
+<span class="fc bfc" id="L93" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;3&quot;))</span>
+			{
+<span class="fc" id="L95">				parts[0]=&quot;2&quot;;</span>
+			}
+<span class="fc bfc" id="L97" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;4&quot;))</span>
+			{
+<span class="fc" id="L99">				parts[0]=&quot;3&quot;;</span>
+			}
+<span class="fc bfc" id="L101" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;5&quot;))</span>
+			{
+<span class="fc" id="L103">				parts[0]=&quot;4&quot;;</span>
+			}
+<span class="fc bfc" id="L105" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;6&quot;))</span>
+			{
+<span class="fc" id="L107">				parts[0]=&quot;5&quot;;</span>
+			}
+<span class="fc bfc" id="L109" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;7&quot;))</span>
+			{
+<span class="fc" id="L111">				parts[0]=&quot;6&quot;;</span>
+			}
+<span class="fc bfc" id="L113" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;8&quot;))</span>
+			{
+<span class="fc" id="L115">				parts[0]=&quot;7&quot;;</span>
+			}
+<span class="fc bfc" id="L117" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;9&quot;))</span>
+			{
+<span class="fc" id="L119">				parts[0]=&quot;8&quot;;</span>
+			}
+<span class="fc bfc" id="L121" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;j&quot;))</span>
+			{
+<span class="fc" id="L123">				parts[0]=&quot;10&quot;;</span>
+			}
+<span class="fc bfc" id="L125" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;q&quot;))</span>
+			{
+<span class="fc" id="L127">				parts[0]=&quot;11&quot;;</span>
+			}
+<span class="fc bfc" id="L129" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;k&quot;))</span>
+			{
+<span class="fc" id="L131">				parts[0]=&quot;12&quot;;</span>
+			}
+<span class="fc bfc" id="L133" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;a&quot;))</span>
+			{
+<span class="fc" id="L135">				parts[0]=&quot;0&quot;;</span>
+			}
+<span class="fc bfc" id="L137" title="All 2 branches covered.">			if (parts[0].equalsIgnoreCase(&quot;t&quot;))</span>
+			{
+<span class="fc" id="L139">				parts[0]=&quot;9&quot;;</span>
+			}
+<span class="fc bfc" id="L141" title="All 2 branches covered.">			if (parts[1].equalsIgnoreCase(&quot;h&quot;))</span>
+			{
+<span class="fc" id="L143">				parts[1]=&quot;0&quot;;</span>
+			}
+<span class="fc bfc" id="L145" title="All 2 branches covered.">			if (parts[1].equalsIgnoreCase(&quot;d&quot;))</span>
+			{
+<span class="fc" id="L147">				parts[1]=&quot;1&quot;;</span>
+			}
+<span class="fc bfc" id="L149" title="All 2 branches covered.">			if (parts[1].equalsIgnoreCase(&quot;c&quot;))</span>
+			{
+<span class="fc" id="L151">				parts[1]=&quot;2&quot;;</span>
+			}
+<span class="fc bfc" id="L153" title="All 2 branches covered.">			if (parts[1].equalsIgnoreCase(&quot;s&quot;))</span>
+			{
+<span class="fc" id="L155">				parts[1]=&quot;3&quot;;</span>
+			}
+
+<span class="fc" id="L158">			value=Integer.parseInt(parts[0]);</span>
+<span class="fc" id="L159">			type= Integer.parseInt(parts[1]);</span>
+<span class="fc" id="L160">			Card c=new Card(value, type);</span>
+			//We store the first 5 &quot;arguments&quot; as the cards from the table
+<span class="fc bfc" id="L162" title="All 2 branches covered.">			if (i &lt; 5)</span>
+			{
+<span class="fc" id="L164">				table[i]=c;</span>
+<span class="fc" id="L165">				tablevalues[c.getValue()]++;</span>
+<span class="fc" id="L166">				tabletype[c.getType()]++;</span>
+			}
+			else
+			{
+				//We then store the next 5 as the next player
+<span class="fc bfc" id="L171" title="All 2 branches covered.">				if (i%5==0)</span>
+				{
+<span class="fc" id="L173">					Player p=new Player(numplayers+1);</span>
+					//This stores the table's cards in the player's array of 52
+<span class="fc bfc" id="L175" title="All 2 branches covered.">					for (int k=0;k&lt;5;k++)</span>
+					{
+<span class="fc" id="L177">						p.cards[table[k].getValue()+(13*table[k].getType())]=1;</span>
+					}
+<span class="fc" id="L179">					players.add(p);</span>
+<span class="fc" id="L180">					numplayers++;</span>
+
+<span class="fc" id="L182">					players.get(numplayers-1).playercards[(i%5)]=c;</span>
+<span class="fc" id="L183">					players.get(numplayers-1).values[c.getValue()]++;</span>
+<span class="fc" id="L184">					players.get(numplayers-1).type[c.getType()]++;</span>
+<span class="fc" id="L185">					players.get(numplayers-1).cards[c.getValue()</span>
+<span class="fc" id="L186">							+(13*c.getType())]=2;</span>
+
+<span class="fc" id="L188">				}</span>
+				else
+				//As long as we havn't hit a total of 5 cards,
+				//we continue to add cards
+				//to the current player's hand.
+				{
+<span class="fc" id="L194">					players.get(numplayers-1).playercards[(i%5)]=c;</span>
+<span class="fc" id="L195">					players.get(numplayers-1).values[c.getValue()]++;</span>
+<span class="fc" id="L196">					players.get(numplayers-1).type[c.getType()]++;</span>
+<span class="fc" id="L197">					players.get(numplayers-1).cards[c.getValue()</span>
+<span class="fc" id="L198">							+(13*c.getType())]=2;</span>
+				}
+			}
+		}
+<span class="fc" id="L202">		return players;</span>
+	}
+	public static void rank(int numplayers, ArrayList&lt;Player&gt; players)
+	{
+<span class="fc bfc" id="L206" title="All 2 branches covered.">		for (int i=0;i&lt;numplayers;i++) {</span>
+<span class="fc" id="L207">            int[] a = players.get(i).cards;</span>
+            //Dinnerparty check
+<span class="fc bfc" id="L209" title="All 2 branches covered.">            if ((a[11] + a[12] + a[24] + a[25] + a[37] + a[38] + a[50] + a[51])</span>
+                    &gt;= 8) {
+<span class="fc" id="L211">                int sum = 0;</span>
+<span class="fc" id="L212">                int issuited = 0;</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">                for (int x = 0; x &lt; 4; x++) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                    if (a[11 + (13 * x)] != 0) {</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">                        if (a[12 + (13 * x)] != 0) {</span>
+<span class="fc" id="L216">                            issuited++;</span>
+<span class="fc" id="L217">                            sum += a[11 + (13 * x)];</span>
+<span class="fc" id="L218">                            sum += a[12 + (13 * x)];</span>
+                        }
+                    }
+                }
+<span class="pc bpc" id="L222" title="3 of 6 branches missed.">                if (issuited == 3 &amp;&amp; (sum == 8 || sum == 9)) {</span>
+<span class="fc" id="L223">                    players.get(i).setrank(16);</span>
+                }
+
+
+            }
+            //Politics check
+<span class="fc bfc" id="L229" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 16) {</span>
+<span class="fc" id="L230">                int sum = 0;</span>
+<span class="fc" id="L231">                int suited = 0;</span>
+<span class="fc" id="L232">                int helper = 0;</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">                while (helper &lt; 4) {</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">                    if (a[10 + 13 * helper] != 0) {</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">                        if (a[11 + 13 * helper] != 0) {</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                            if (a[12 + 13 * helper] != 0) {</span>
+<span class="fc" id="L237">                                sum += a[10 + 13 * helper];</span>
+<span class="fc" id="L238">                                sum += a[11 + 13 * helper];</span>
+<span class="fc" id="L239">                                sum += a[12 + 13 * helper];</span>
+<span class="fc" id="L240">                                suited++;</span>
+                            }
+
+                        }
+
+                    }
+<span class="fc" id="L246">                    helper++;</span>
+                }
+<span class="pc bpc" id="L248" title="1 of 6 branches missed.">                if (suited == 2 &amp;&amp; (sum == 8 || sum == 9)) {</span>
+<span class="fc" id="L249">                    players.get(i).setrank(15);</span>
+                }
+            }
+            //Orgy check
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 15) {</span>
+<span class="fc" id="L254">                int sum1 = 0;</span>
+<span class="fc" id="L255">                int sum2 = 0;</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">                for (int z = 0; z &lt; 4; z++) {</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">                    for (int x = 10; x &lt; 12; x++) {</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">                        if (a[x + (13 * z)] == 1) {</span>
+<span class="fc" id="L259">                            sum1++;</span>
+                        }
+<span class="fc bfc" id="L261" title="All 2 branches covered.">                        if (a[x + (13 * z)] == 2) {</span>
+<span class="fc" id="L262">                            sum2 += 2;</span>
+                        }
+                    }
+                }
+<span class="fc bfc" id="L266" title="All 4 branches covered.">                if (sum2 &gt;= 4 &amp;&amp; sum1 &gt;= 3) {</span>
+<span class="fc" id="L267">                    players.get(i).setrank(14);</span>
+
+                }
+            }
+            //Kingdom and flush check
+<span class="fc bfc" id="L272" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 14) {</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">                for (int x = 0; x &lt; 4; x++) {</span>
+<span class="fc" id="L274">                    int sum1 = 0;</span>
+<span class="fc" id="L275">                    int sum2 = 0;</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">                    for (int y = 0; y &lt; 13; y++) {</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">                        if (a[y + (13 * x)] == 1) {</span>
+<span class="fc" id="L278">                            sum1++;</span>
+                        }
+<span class="fc bfc" id="L280" title="All 2 branches covered.">                        if (a[y + (13 * x)] == 2) {</span>
+<span class="fc" id="L281">                            sum2 += 2;</span>
+                        }
+                    }
+<span class="fc bfc" id="L284" title="All 4 branches covered.">                    if (sum2 &gt;= 4 &amp;&amp; sum1 &gt;= 3) {</span>
+<span class="pc bpc" id="L285" title="1 of 6 branches missed.">                        if (a[10 + (13 * x)] != 0 &amp;&amp; a[11 + (13 * x)] != 0 &amp;&amp;</span>
+                                a[12 + (13 * x)] != 0) {
+<span class="fc" id="L287">                            players.get(i).setrank(13);</span>
+                        } else {
+<span class="fc" id="L289">                            players.get(i).setrank(9);</span>
+                        }
+                    }
+                }
+            }
+
+            //homosapiens check
+<span class="fc bfc" id="L296" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 13) {</span>
+<span class="fc" id="L297">                int sum1 = 0;</span>
+<span class="fc" id="L298">                int sum2 = 0;</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">                for (int x = 0; x &lt; 4; x++) {</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">                    for (int y = 10; y &lt; 13; y++) {</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">                        if (a[y + (13 * x)] == 1) {</span>
+<span class="fc" id="L302">                            sum1++;</span>
+                        }
+<span class="fc bfc" id="L304" title="All 2 branches covered.">                        if (a[y + (13 * x)] == 2) {</span>
+<span class="fc" id="L305">                            sum2 += 2;</span>
+                        }
+                    }
+                }
+<span class="fc bfc" id="L309" title="All 4 branches covered.">                if (sum2 &gt;= 4 &amp;&amp; sum1 &gt;= 3) {</span>
+<span class="fc" id="L310">                    players.get(i).setrank(12);</span>
+                }
+            }
+            //overfull house check
+<span class="fc bfc" id="L314" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 12) {</span>
+<span class="fc" id="L315">                int sum = 0;</span>
+                //check for 4 of a kind
+<span class="fc bfc" id="L317" title="All 2 branches covered.">                for (int z = 0; z &lt; 13; z++) {</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">                    if (a[z] != 0) {</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                        if (a[z + 13] != 0) {</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">                            if (a[z + 26] != 0) {</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">                                if (a[z + 39] != 0) {</span>
+<span class="fc" id="L322">                                    sum += a[z];</span>
+<span class="fc" id="L323">                                    sum += a[z + 13];</span>
+<span class="fc" id="L324">                                    sum += a[z + 26];</span>
+<span class="fc" id="L325">                                    sum += a[z + 39];</span>
+                                }
+
+                            }
+                        }
+                    }
+                }
+                //check for a pair
+<span class="fc" id="L333">                int[] ispair = new int[13];</span>
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">                if (sum &lt;= 7) {</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">                    for (int z = 0; z &lt; 52; z++) {</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">                        if (a[z] != 0) {</span>
+<span class="fc" id="L337">                            ispair[z % 13] += a[z];</span>
+                        }
+                    }
+                    //check array now
+<span class="fc bfc" id="L341" title="All 2 branches covered.">                    for (int z = 0; z &lt; 13; z++) {</span>
+<span class="fc bfc" id="L342" title="All 4 branches covered.">                        if (ispair[z] &gt;= 2 &amp;&amp; ispair[z] &lt;= 4) {</span>
+<span class="pc bpc" id="L343" title="1 of 4 branches missed.">                            if (sum + ispair[z] == 8 || sum + ispair[z] == 9) {</span>
+<span class="fc" id="L344">                                players.get(i).setrank(11);</span>
+                            }
+                        }
+                    }
+                }
+            }
+            //triplets check
+<span class="fc bfc" id="L351" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 11) {</span>
+<span class="fc" id="L352">                int[] istrip1 = new int[13];</span>
+<span class="fc" id="L353">                int[] istrip2 = new int[13];</span>
+<span class="fc" id="L354">                int tripcount = 0;</span>
+<span class="fc" id="L355">                int trip = 0;</span>
+
+<span class="fc bfc" id="L357" title="All 2 branches covered.">                for (int z = 0; z &lt; 52; z++) {</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">                    if (a[z] == 1) {</span>
+<span class="fc" id="L359">                        istrip1[z % 13]++;</span>
+                    }
+<span class="fc bfc" id="L361" title="All 2 branches covered.">                    if (a[z] == 2) {</span>
+<span class="fc" id="L362">                        istrip2[z % 13] += 2;</span>
+                    }
+                }
+<span class="fc bfc" id="L365" title="All 2 branches covered.">                for (int z = 0; z &lt; 13; z++) {</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">                    if (istrip1[z] + (istrip2[z] / 2) &gt;= 3) {</span>
+<span class="fc" id="L367">                        trip += istrip1[z];</span>
+<span class="fc" id="L368">                        trip += istrip2[z];</span>
+<span class="fc" id="L369">                        tripcount++;</span>
+                    }
+                }
+<span class="pc bpc" id="L372" title="1 of 6 branches missed.">                if (tripcount == 2 &amp;&amp; (trip == 8 || trip == 9)) {</span>
+<span class="fc" id="L373">                    players.get(i).setrank(10);</span>
+                }
+            }
+
+            //check Odd or even
+//            if (players.get(i).getrank() &lt; 9) {
+//                //Because of how our indices are set, index 1=2 and index 2 =3
+//                //so really, if we are checking for odds then if take
+//                //index%2 and if it is equal to 0 then it is an odd number.
+//                int isodd = 0;
+//                int howodd = 0;
+//                int iseven = 0;
+//                int howeven = 0;
+//                for (int z = 0; z &lt; 4; z++) {
+//                    for (int x = 1; x &lt; 10; x++) {
+//                        if (a[x + (13 * z)] != 0) {
+//                            if (x % 2 == 1) {
+//                                iseven++;
+//                                howeven += a[x + (13 * z)];
+//                            }
+//                            if (x % 2 == 0) {
+//                                isodd++;
+//                                howodd += a[x + (13 * z)];
+//                            }
+//                        }
+//                    }
+//                }
+//                if (isodd &gt;= 6 &amp;&amp; (howodd == 8 || howodd == 9)) {
+//                    players.get(i).setrank(8);
+//                }
+//                if (iseven &gt;= 6 &amp;&amp; (howeven == 8 || howeven == 9)) {
+//                    players.get(i).setrank(7);
+//                }
+//            }
+<span class="fc bfc" id="L407" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 9 ){</span>
+<span class="fc" id="L408">                int evenuserCards=0;</span>
+<span class="fc" id="L409">                int odduserCards = 0;</span>
+<span class="fc" id="L410">                int evens = 0;</span>
+<span class="fc" id="L411">                int odds = 0;</span>
+<span class="fc" id="L412">                int [] tempCards= new int[52];</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">                for (int s = 0; s &lt; 52 ; s++){</span>
+<span class="fc" id="L414">                    tempCards[s]= a[s];</span>
+                }
+//                for (int s = 0 ; s&lt;52 ; s++){
+//                    System.out.println(a[s]);
+//                }
+
+                //Check user cards, must have at least 2 even or odds to consider this hand.
+<span class="fc bfc" id="L421" title="All 2 branches covered.">                for (int j = 0; j &lt; 52; j++) {</span>
+<span class="fc bfc" id="L422" title="All 2 branches covered.">                    if (tempCards[j] == 2) {</span>
+<span class="fc" id="L423">                        tempCards[j] = -1;</span>
+                        //If the user card is a number, check which number it is and increment count on evens/odds
+                       //Because of how our indices are set, index 1=2 and index 2 =3
+                       //so really, if we are checking for odds then if take
+                       //index%2 and if it is equal to 0 then it is an odd number.
+<span class="fc bfc" id="L428" title="All 4 branches covered.">                        if (j%13 &gt; 0 &amp;&amp; j%13 &lt;10){</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">                            if ((j%13)%2 == 0)</span>
+                            {
+<span class="fc" id="L431">                                odduserCards++;</span>
+<span class="fc" id="L432">                                odds++;</span>
+                            }
+                            else{
+<span class="fc" id="L435">                                evenuserCards++;</span>
+<span class="fc" id="L436">                                evens++;</span>
+                            }
+                        }
+                    }
+                }
+                //After checking user cards, proceed if there is at least 2 user cards that are odd or even
+<span class="fc bfc" id="L442" title="All 4 branches covered.">                if (evenuserCards &gt; 1 || odduserCards &gt; 1) {</span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">                    for (int j = 0; j &lt; 52; j++) {</span>
+<span class="fc bfc" id="L444" title="All 2 branches covered.">                        if (tempCards[j] == 1 ){</span>
+<span class="fc" id="L445">                            tempCards[j] = -1;</span>
+<span class="fc bfc" id="L446" title="All 4 branches covered.">                            if (j%13 &gt; 0 &amp;&amp; j%13 &lt;10){</span>
+<span class="fc bfc" id="L447" title="All 2 branches covered.">                                if ((j%13)%2 == 0)</span>
+                                {
+<span class="fc" id="L449">                                    odds++;</span>
+                                }
+                                else{
+<span class="fc" id="L452">                                    evens++;</span>
+                                }
+                            }
+
+                        }
+                    }
+                    //Check how many odds or evens there are. if its sufficient rank it
+<span class="fc bfc" id="L459" title="All 2 branches covered.">                    if (odds &gt; 5){</span>
+<span class="fc" id="L460">                        players.get(i).setrank(8);</span>
+                    }
+<span class="fc bfc" id="L462" title="All 2 branches covered.">                    else if (evens &gt;5){</span>
+<span class="fc" id="L463">                        players.get(i).setrank(7);</span>
+                    }
+
+                }
+
+
+            }
+            //Monarchy check
+<span class="fc bfc" id="L471" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 7) {</span>
+<span class="fc" id="L472">                int[] b = new int[52];</span>
+<span class="fc bfc" id="L473" title="All 2 branches covered.">                for (int x = 0; x &lt; 52; x++) {</span>
+<span class="fc" id="L474">                    b[x] = a[x];</span>
+                }
+<span class="fc" id="L476">                int monarchy = 0;</span>
+<span class="fc" id="L477">                int howm = 0;</span>
+<span class="fc bfc" id="L478" title="All 2 branches covered.">                for (int x = 0; x &lt; 4; x++) {</span>
+<span class="fc bfc" id="L479" title="All 2 branches covered.">                    if (b[10 + (13 * x)] != 0) {</span>
+<span class="fc bfc" id="L480" title="All 2 branches covered.">                        if (b[11 + (13 * x)] != 0) {</span>
+<span class="fc bfc" id="L481" title="All 2 branches covered.">                            if (b[12 + (13 * x)] != 0) {</span>
+<span class="fc" id="L482">                                monarchy++;</span>
+<span class="fc" id="L483">                                howm += b[10 + (13 * x)];</span>
+<span class="fc" id="L484">                                howm += b[11 + (13 * x)];</span>
+<span class="fc" id="L485">                                howm += b[12 + (13 * x)];</span>
+<span class="fc" id="L486">                                b[10 + (13 * x)] = 0;</span>
+<span class="fc" id="L487">                                b[11 + (13 * x)] = 0;</span>
+<span class="fc" id="L488">                                b[12 + (13 * x)] = 0;</span>
+                            }
+                        }
+                    }
+                }
+<span class="fc bfc" id="L493" title="All 2 branches covered.">                if (monarchy == 1) {</span>
+<span class="fc bfc" id="L494" title="All 2 branches covered.">                    for (int x = 0; x &lt; 4; x++) {</span>
+<span class="fc bfc" id="L495" title="All 2 branches covered.">                        for (int y = 10; y &lt; 13; y++) {</span>
+<span class="fc bfc" id="L496" title="All 2 branches covered.">                            if (b[y + (13 * x)] != 0) {</span>
+<span class="fc" id="L497">                                b[y + (13 * x)] = 0;</span>
+                            }
+                        }
+                    }
+                }
+<span class="fc bfc" id="L502" title="All 2 branches covered.">                for (int x = 0; x &lt; 52; x++) {</span>
+<span class="fc" id="L503">                    howm += b[x];</span>
+                }
+<span class="pc bpc" id="L505" title="1 of 4 branches missed.">                if (howm &gt;= 8 &amp;&amp; monarchy == 1) {</span>
+<span class="fc" id="L506">                    players.get(i).setrank(6);</span>
+                }
+
+            }
+            //check for 3 pair
+<span class="fc bfc" id="L511" title="All 2 branches covered.">            if (players.get(i).getrank() &lt;6){</span>
+<span class="fc" id="L512">                int [] tempCards= new int[52];</span>
+<span class="fc bfc" id="L513" title="All 2 branches covered.">                for (int s = 0; s &lt; 52 ; s++){</span>
+<span class="fc" id="L514">                    tempCards[s]= a[s];</span>
+                }
+<span class="fc" id="L516">                int countOfPairs= 0;</span>
+<span class="fc" id="L517">                int userCards=0;</span>
+<span class="fc" id="L518">                boolean PairHasBeenFound =false;</span>
+                //check user cards first
+<span class="fc bfc" id="L520" title="All 2 branches covered.">                for (int k =0; k &lt; 52;k++){</span>
+<span class="fc" id="L521">                    PairHasBeenFound=false;</span>
+<span class="fc bfc" id="L522" title="All 2 branches covered.">                    if (tempCards[k] == 2){</span>
+<span class="fc" id="L523">                        tempCards[k] =-1;</span>
+<span class="fc bfc" id="L524" title="All 2 branches covered.">                        for (int j=0; j&lt;4 ; j++){</span>
+                            //if there is a &quot;pair&quot;, mark it as well and increment the count. a user can
+<span class="fc bfc" id="L526" title="All 2 branches covered.">                            if (!PairHasBeenFound){</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">                                if (tempCards[k%13 + (13*j)] ==1){</span>
+<span class="fc" id="L528">                                    tempCards[k%13 + (13*j)] =-1;</span>
+<span class="fc" id="L529">                                    countOfPairs++;</span>
+<span class="fc" id="L530">                                    userCards++;</span>
+<span class="fc" id="L531">                                    PairHasBeenFound =true;</span>
+                                }
+<span class="fc bfc" id="L533" title="All 2 branches covered.">                                else if (tempCards[k%13 + (13*j)]==2){</span>
+<span class="fc" id="L534">                                    tempCards[k%13 + (13*j)]=-1;</span>
+<span class="fc" id="L535">                                    countOfPairs++;</span>
+<span class="fc" id="L536">                                    userCards +=2;</span>
+<span class="fc" id="L537">                                    PairHasBeenFound =true;</span>
+                                }
+<span class="pc bpc" id="L539" title="1 of 6 branches missed.">                                if (countOfPairs == 3 &amp;&amp; userCards &lt; 4 &amp;&amp; userCards &gt; 1){</span>
+<span class="fc" id="L540">                                    players.get(i).setrank(5);</span>
+                                }
+                            }
+                        }
+                    }
+                }
+//                for (int s = 0 ; s&lt;52 ; s++){
+//                    System.out.println(a[s]);
+//                }
+            }
+            //check for monochromatic
+<span class="fc bfc" id="L551" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 5) {</span>
+<span class="fc bfc" id="L552" title="All 2 branches covered.">                for (int x = 0; x &lt; 2; x++) {</span>
+<span class="fc" id="L553">                    int sum1 = 0;</span>
+<span class="fc" id="L554">                    int sum2 = 0;</span>
+<span class="fc bfc" id="L555" title="All 2 branches covered.">                    for (int y = 0; y &lt; 26; y++) {</span>
+<span class="fc bfc" id="L556" title="All 2 branches covered.">                        if (a[y + (26 * x)] == 1) {</span>
+<span class="fc" id="L557">                            sum1++;</span>
+                        }
+<span class="fc bfc" id="L559" title="All 2 branches covered.">                        if (a[y + (26 * x)] == 2) {</span>
+<span class="fc" id="L560">                            sum2 += 2;</span>
+                        }
+                    }
+<span class="fc bfc" id="L563" title="All 4 branches covered.">                    if (sum2 &gt;= 4 &amp;&amp; sum1 &gt;= 4) {</span>
+<span class="fc" id="L564">                        players.get(i).setrank(4);</span>
+                    }
+                }
+            }
+
+            //check for swingers (2 suited kings and queens)
+<span class="fc bfc" id="L570" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 4) {</span>
+<span class="fc" id="L571">                int sum = 0;</span>
+<span class="fc" id="L572">                int suited = 0;</span>
+<span class="fc bfc" id="L573" title="All 2 branches covered.">                for (int x = 0; x &lt; 4; x++) {</span>
+<span class="fc bfc" id="L574" title="All 2 branches covered.">                    if (a[11 + (13 * x)] != 0) {</span>
+<span class="fc bfc" id="L575" title="All 2 branches covered.">                        if (a[12 + (13 * x)] != 0) {</span>
+<span class="fc" id="L576">                            sum += a[11 + (13 * x)];</span>
+<span class="fc" id="L577">                            sum += a[12 + (13 * x)];</span>
+<span class="fc" id="L578">                            suited++;</span>
+                        }
+                    }
+                }
+<span class="pc bpc" id="L582" title="1 of 4 branches missed.">                if (suited == 2 &amp;&amp; (sum &lt;= 6)) {</span>
+<span class="fc" id="L583">                    players.get(i).setrank(3);</span>
+                }
+            }
+            //check for rainbow
+//			if (players.get(i).getrank()&lt;3)
+//			{
+//				int suits=0;
+//				int howsuits=0;
+//				for (int x=0;x&lt;4;x++)
+//				{
+//					for (int y=0;y&lt;13;y++)
+//					{
+//						if (suits !=1+x)
+//						{
+//							if (a[y+(13*x)]!=0)
+//							{
+//								suits++;
+//								howsuits+=a[y+(13*x)];
+//                                System.out.println(howsuits);
+//							}
+//						}
+//					}
+//				}
+//				System.out.println(howsuits);
+//				if (suits==4 &amp;&amp; howsuits &gt;=8)
+//				{
+//					players.get(i).setrank(2);
+//				}
+//			}
+//		}
+<span class="fc bfc" id="L613" title="All 2 branches covered.">            if (players.get(i).getrank() &lt; 3) {</span>
+<span class="fc" id="L614">                int[] suits = {0, 0, 0, 0};</span>
+<span class="fc" id="L615">                int [] tempCards= new int[52];</span>
+<span class="fc bfc" id="L616" title="All 2 branches covered.">                for (int s = 0; s &lt; 52 ; s++){</span>
+<span class="fc" id="L617">                    tempCards[s]= a[s];</span>
+                }
+//                for (int s = 0 ; s&lt;52 ; s++){
+//                    System.out.println(tempCards[s]);
+//                }
+                //Check to see how many suits user has first, at most 3 unique suits can come from user hand
+<span class="fc bfc" id="L623" title="All 2 branches covered.">                for (int j = 0; j &lt; 52; j++) {</span>
+<span class="fc bfc" id="L624" title="All 2 branches covered.">                    if (tempCards[j] == 2) {</span>
+<span class="fc" id="L625">                        tempCards[j] = -1;</span>
+<span class="fc" id="L626">                        suits[j / 13] = 1;</span>
+//                        System.out.println(suits[0]);
+//                        System.out.println(suits[1]);
+//                        System.out.println(suits[2]);
+//                        System.out.println(suits[3]);
+                    }
+                }
+                //if at least one suit is missing, Then we may still have a rainbow, also if all are accounted for, we
+                //will have a rainbow for sure because any care from the table can fulfill one suit.
+<span class="pc bpc" id="L635" title="1 of 8 branches missed.">                if (suits[0] == 0 || suits[1] == 0 || suits[2] == 0 || suits[3] == 0) {</span>
+<span class="fc bfc" id="L636" title="All 2 branches covered.">                    for (int j = 0; j &lt; 52; j++) {</span>
+<span class="fc bfc" id="L637" title="All 2 branches covered.">                        if (tempCards[j] == 1) {</span>
+<span class="fc" id="L638">                            tempCards[j] = -1;</span>
+<span class="fc" id="L639">                            suits[j / 13] = 1;</span>
+//                            System.out.println(suits[0]);
+//                            System.out.println(suits[1]);
+//                            System.out.println(suits[2]);
+//                            System.out.println(suits[3]);
+                        }
+                    }
+                }
+                //check if table + user have all suits
+<span class="pc bpc" id="L648" title="1 of 8 branches missed.">                if (suits[0] == 1 &amp;&amp; suits[1] == 1 &amp;&amp; suits[2] == 1 &amp;&amp; suits[3] == 1) {</span>
+<span class="fc" id="L649">                    players.get(i).setrank(2);</span>
+                }
+            }
+        }
+		//end of for
+
+<span class="fc" id="L655">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
